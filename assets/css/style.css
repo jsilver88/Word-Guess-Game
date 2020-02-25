@@ -1,0 +1,16 @@
+  
+body {
+    background-image: url();
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 100vh;
+    color: #131313;
+    display: flex;
+}
+.container {
+    margin: auto;
+    text-align: center;
+}
+#currentWord {
+    letter-spacing: 10px;
+}
