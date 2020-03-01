@@ -1,91 +1,74 @@
-var movies = ["hangover", "superbad", "step brothers", "anchorman", "dodgeball", "wedding crashers", "old school", "elf", "tropic thunder", "mean girls", "meet the parents", "napoleon dynamite", "knocked up", "school of rock", "zoolander", "bruce almighty", "pineapple express", "forgetting sarah marshall","super troopers"]
+$(document).ready(function() {
+    var movies = ["hangover", "superbad", "step brothers", "anchorman", "dodgeball", "wedding crashers", "old school", "elf", "tropic thunder", "mean girls", "meet the parents", "napoleon dynamite", "knocked up", "school of rock", "zoolander", "bruce almighty", "pineapple express", "forgetting sarah marshall","super troopers"]
 
 
 
-var randomMovie = "";
-var letters = []
-var blankWord = "";
-var blankWordCorrect = [];
-var guessWrong = [];
-var wins = 0;
-var losses = 0;
-const guessesRemaining = 10;
+    var randomMovie = "";
+    var letters = []
+    var blankWord = [];
+    var guessedLetters = [];
+    var wins = 0;
+    var losses = 0;
+    var guessCount = 10;
+    var finishedGame = false;
 
-// START GAME!
-
-
-let chooseWord = () =>{
+    // sets a movie from movie array into randomMovie
     randomMovie = movies[Math.floor(Math.random() * movies.length)];
+    console.log(randomMovie);
 
-}
+    // iterating over randomMovie and setting it to blankWord index
+    randomMovie.split("").forEach(function(letter, i){
+        blankWord[i] = "_"; 
+    });
+    // setting the blank word to html 
+    $("#guess-word").text(blankWord.join(" "));
+    console.log(blankWord.join(" "));
+    // when user presses a key run code e = event
+    $("body").on("keyup", function(e){
+        console.log(randomMovie.includes(e.key));
+        console.log(e.key);
+        
 
-let generateUserGuess = () =>{
-    letters = randomMovie.split("");
-    // stores length of the blank word
-    blankWord = letters.length;
-    // created loop to generate _ for every letter
-    for (var i = 0; i < blankWord; i++){
-        if(blankWord[i] === " "){
-            blankWordCorrect.push(" ");
+        // If movie includes the pressed key
+        if (randomMovie.includes(e.key)){
+            console.log("correct guess.")
 
-        } else {
-            blankWordCorrect.push("_");
+            randomMovie.split("").forEach(function(letter, i){
+                console.log("On iteration " + i + " the letter is " + letter);
+                if (letter === e.key){
+                    blankWord[i] = letter;
+                    $("#guess-word").text(blankWord.join("")); //updating HTML with blankWord
+                    console.log(blankWord);
+
+                } 
+                
+                
+                
+            });
+            if (blankWord.join("") === randomMovie){
+                wins++
+                $("#wins").text(wins);
+            } 
+
             
-        }
-    }
-
-}
-
-let updateUserGuess = () =>{
-    document.getElementById("guess-word").innerHTML = " " + blankWordCorrect.join(" ");
-
-}
-
-let addKeyListener = () =>{
-    document.addEventListener("keydown", handleUserGuess)
-}
-let game = () =>{
-    
-    chooseWord();
-    generateUserGuess();
-    updateUserGuess();
-    addKeyListener();
-    
-
-}
-
-function handleUserGuess(event){
-    console.log(event.key)
-    let currentGuess = event.key
-    for (var i = 0; i < randomMovie.length; i++){
-        if (currentGuess === randomMovie[i]){
-            console.log("correct.");
-            console.log(randomMovie);
-            handleCorrectGuess(i, currentGuess)
         } else {
-            console.log("incorrect.");
-            // handle incorrect guess
-        }
-    }
-    updateUserGuess();
-}
+            console.log("incorrect guess.");
+            guessCount--
+            letters.push(e.key);
+            $("#letters-wrong").text(letters);
+            $("#guesses-remaining").text(guessCount);
+        }; 
+    });
 
-let handleCorrectGuess = (index, userGuess) =>{
-    for (var i = 0; i < blankWordCorrect.length; i++){
-        if (i === index){
-            blankWordCorrect[i] = userGuess
-        }
-    }
-}
 
-const reset = () => {
-    guessesRemaining = 10;
-    guessWrong = [];
-    blanksWordCorrect = [];
-    game ()
-}
+   
 
-game();
+});
+
+
+
+
+
 
 /**
  * HTML elements: Wins, losses, user guess, guesses remaining, letters already guessed
