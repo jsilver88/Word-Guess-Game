@@ -39,7 +39,6 @@ $(document).ready(function() {
                     blankWord[i] = letter;
                     $("#guess-word").text(blankWord.join("")); //updating HTML with blankWord
                     console.log(blankWord);
-
                 } 
                 
                 
